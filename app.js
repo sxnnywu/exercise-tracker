@@ -2,8 +2,9 @@
 const express = require('express');
 const app = express();
 
-// middleware to parse form data
+// middleware to parse data
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // ROUTE: create a new user
 app.post('/api/users', async (req, res) => {
