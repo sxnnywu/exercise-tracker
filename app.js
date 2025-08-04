@@ -7,13 +7,13 @@ app.use(express.urlencoded({ extended: true }));
 
 // ROUTE: create a new user
 app.post('/api/users', async (req, res) => {
-x
+
     // get username 
     const { username } = req.body;
 
     // check if username is provided
     if (!username) 
-        return res.status(400).json({ error: 'Username is required' });
+        return res.json({ error: 'Username is required' });
     
     // create new user
     const User = require('./models/User');
@@ -22,9 +22,9 @@ x
     // save user to database
     try {
         const savedUser = await user.save();
-        res.status(201).json({ _id: savedUser._id, username: savedUser.username });
+        res.json({ _id: savedUser._id, username: savedUser.username });
     } catch (error) {
-        res.status(500).json({ error: 'Error saving user' });
+        res.json({ error: 'Error saving user' });
     }
 });
 
@@ -37,9 +37,9 @@ app.get('/api/users', async (req, res) => {
     // fetch users from database
     try {
         const users = await User.find({}, { username: 1, _id: 1 });
-        res.status(200).json(users);
+        res.json(users);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching users' });
+        res.json({ error: 'Error fetching users' });
     }
 });
 
@@ -57,7 +57,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
     try{
         // find user by ID
         const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ error: 'User not found' });
+        if (!user) return res.json({ error: 'User not found' });
 
         // create exercise object
         const exercise = new Exercise({
@@ -71,7 +71,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
         const savedExercise = await exercise.save();
         
         // respond with exercise details
-        res.status(201).json({
+        res.json({
             _id: user._id,
             username: user.username,
             description: savedExercise.description,
@@ -80,7 +80,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
         });
     }
     catch (error) {
-        res.status(500).json({ error: 'Error saving exercise' });
+        res.json({ error: 'Error saving exercise' });
     }
 });
 
@@ -98,7 +98,7 @@ app.get('/api/users/:_id/logs', async (req, res) => {
     try{
         // find user by ID
         const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ error: 'User not found' });
+        if (!user) return res.json({ error: 'User not found' });
 
         // build query for exercises
         let query = { userId: user._id };
@@ -123,7 +123,7 @@ app.get('/api/users/:_id/logs', async (req, res) => {
         });
     }
     catch (error) {
-        res.status(500).json({ error: 'Error fetching exercise log' });
+        res.json({ error: 'Error fetching exercise log' });
     }
 });
 
