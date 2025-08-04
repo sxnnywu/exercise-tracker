@@ -2,25 +2,22 @@
 const express = require('express');
 const app = express();
 
-// middleware to parse JSON
+// middleware to parse form data
 app.use(express.urlencoded({ extended: true }));
 
 // ROUTE: create a new user
 app.post('/api/users', async (req, res) => {
 x
     // get username 
-    const { username } = req.body.username;
+    const { username } = req.body;
 
     // check if username is provided
     if (!username) 
         return res.status(400).json({ error: 'Username is required' });
-
-    // parse username
-    const parsedUsername = username.trim();
     
     // create new user
     const User = require('./models/User');
-    const user = new User({ parsedUsername });
+    const user = new User({ username: username.trim() });
 
     // save user to database
     try {
