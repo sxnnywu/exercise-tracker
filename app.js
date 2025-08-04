@@ -2,6 +2,22 @@
 const express = require('express');
 const app = express();
 
+// load environment variables
+require('dotenv').config();
+
+// import mongoose and connect to database
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
+
+// import models
+const User = require('./models/User');
+const Exercise = require('./models/Exercise');
+
 // middleware to parse data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -17,7 +33,6 @@ app.post('/api/users', async (req, res) => {
         return res.json({ error: 'Username is required' });
     
     // create new user
-    const User = require('./models/User');
     const user = new User({ username: username.trim() });
 
     // save user to database
@@ -31,9 +46,6 @@ app.post('/api/users', async (req, res) => {
 
 // ROUTE: list all users
 app.get('/api/users', async (req, res) => {
-
-    // import User model
-    const User = require('./models/User');
 
     // fetch users from database
     try {
@@ -50,10 +62,6 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
     // get user ID and exercise details
     const userId = req.params._id;
     const { description, duration, date } = req.body;
-
-    // import User and Exercise models
-    const User = require('./models/User');
-    const Exercise = require('./models/Exercise');
 
     try{
         // find user by ID
@@ -91,10 +99,6 @@ app.get('/api/users/:_id/logs', async (req, res) => {
     // get user ID and query parameters
     const userId = req.params._id;
     const { from, to, limit } = req.query;
-
-    // import User and Exercise models
-    const User = require('./models/User');
-    const Exercise = require('./models/Exercise');
 
     try{
         // find user by ID
