@@ -7,10 +7,7 @@ require('dotenv').config();
 
 // import mongoose and connect to database
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('MongoDB connection error:', err));
 
@@ -18,28 +15,36 @@ mongoose.connect(process.env.MONGO_URI, {
 const User = require('./models/User');
 const Exercise = require('./models/Exercise');
 
-// middleware to parse data
+// middleware to parse data`
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // ROUTE: create a new user
 app.post('/api/users', async (req, res) => {
 
+    console.log('Creating user:', req.body);
+
     // get username 
     const { username } = req.body;
 
     // check if username is provided
-    if (!username) 
+    if (!username) {
+        console.log('Username is required');
         return res.json({ error: 'Username is required' });
+    }
+    console.log('Username:', username.trim());
     
     // create new user
     const user = new User({ username: username.trim() });
+    console.log('User object:', user);
 
     // save user to database
     try {
         const savedUser = await user.save();
+        console.log('User saved:', savedUser);
         res.json({ _id: savedUser._id, username: savedUser.username });
     } catch (error) {
+        console.error('Error saving user:', error);
         res.json({ error: 'Error saving user' });
     }
 });
