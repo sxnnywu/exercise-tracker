@@ -25,7 +25,7 @@ app.post('/api/users', async (req, res) => {
     console.log('Creating user:', req.body.username);
 
     // get username 
-    const { username } = req.body.username;
+    const username = req.body.username;
 
     // check if username is provided
     if (!username) {
