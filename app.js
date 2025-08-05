@@ -2,6 +2,10 @@
 const express = require('express');
 const app = express();
 
+// cors middleware
+const cors = require('cors');
+app.use(cors());
+
 // load environment variables
 require('dotenv').config();
 
@@ -47,13 +51,13 @@ app.post('/api/users', async (req, res) => {
             username: userObject.username,
             _id: userObject._id
         });
-        res.status(200).json({
+        res.json({
             username: userObject.username,
             _id: userObject._id
         });
     } catch (error) {
         console.error('Error saving user:', error);
-        res.status(500).json({ error: 'Error saving user' });
+        res.json({ error: 'Error saving user' });
     }
 });
 
