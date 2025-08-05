@@ -41,8 +41,10 @@ app.post('/api/users', async (req, res) => {
     // save user to database
     try {
         const savedUser = await user.save();
-        console.log('User saved:', savedUser);
-        res.status(200).json({ username: savedUser.username, _id: savedUser._id.toString() });
+        const userObject = savedUser.toObject();
+        userObject._id = userObject._id.toString(); // convert ObjectId to string
+        console.log('User saved:', userObject);
+        res.status(200).json(userObject);
     } catch (error) {
         console.error('Error saving user:', error);
         res.status(500).json({ error: 'Error saving user' });
