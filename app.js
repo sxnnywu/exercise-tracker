@@ -16,7 +16,7 @@ const User = require('./models/User');
 const Exercise = require('./models/Exercise');
 
 // middleware to parse data`
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // ROUTE: create a new user
