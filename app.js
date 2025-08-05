@@ -26,37 +26,24 @@ app.use(express.json());
 // ROUTE: create a new user
 app.post('/api/users', async (req, res) => {
 
-    console.log('Creating user:', req.body.username);
-
     // get username 
     const username = req.body.username;
 
     // check if username is provided
-    if (!username) {
-        console.log('Username is required');
-        return res.status(400).json({ error: 'Username is required' });
-    }
-    console.log('Username:', username.trim());
+    if (!username) return res.status(400).json({ error: 'Username is required' });
     
     // create new user
     const user = new User({ username: username.trim() });
-    console.log('User object:', user);
 
     // save user to database
     try {
         const savedUser = await user.save();
-        const userObject = savedUser.toObject();
-        userObject._id = userObject._id.toString(); // convert ObjectId to string
-        console.log('User saved:', {
-            username: userObject.username,
-            _id: userObject._id
-        });
+        
         res.json({
-            username: userObject.username,
-            _id: userObject._id
+            username: savedUser.username,
+            _id: savedUser._id
         });
     } catch (error) {
-        console.error('Error saving user:', error);
         res.json({ error: 'Error saving user' });
     }
 });
