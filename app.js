@@ -30,7 +30,7 @@ app.post('/api/users', async (req, res) => {
     const username = req.body.username;
 
     // check if username is provided
-    if (!username) return res.status(400).json({ error: 'Username is required' });
+    if (!username) return res.json({ error: 'Username is required' });
     
     // create new user
     const user = new User({ username: username.trim() });
