@@ -22,7 +22,7 @@ app.use(express.json());
 // ROUTE: create a new user
 app.post('/api/users', async (req, res) => {
 
-    console.log('Creating user:', req.body);
+    console.log('Creating user:', req.body.username);
 
     // get username 
     const { username } = req.body;
