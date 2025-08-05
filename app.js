@@ -47,7 +47,7 @@ app.post('/api/users', async (req, res) => {
             username: userObject.username,
             _id: userObject._id
         });
-        res.status(201).json({
+        res.status(200).json({
             username: userObject.username,
             _id: userObject._id
         });
