@@ -30,7 +30,7 @@ app.post('/api/users', async (req, res) => {
     // check if username is provided
     if (!username) {
         console.log('Username is required');
-        return res.json({ error: 'Username is required' });
+        return res.status(400).json({ error: 'Username is required' });
     }
     console.log('Username:', username.trim());
     
@@ -42,10 +42,10 @@ app.post('/api/users', async (req, res) => {
     try {
         const savedUser = await user.save();
         console.log('User saved:', savedUser);
-        res.json({ username: savedUser.username, _id: savedUser._id });
+        res.status(200).json({ username: savedUser.username, _id: savedUser._id.toString() });
     } catch (error) {
         console.error('Error saving user:', error);
-        res.json({ error: 'Error saving user' });
+        res.status(500).json({ error: 'Error saving user' });
     }
 });
 
